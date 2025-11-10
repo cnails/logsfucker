@@ -4,3 +4,7 @@ compatibility_date = "2024-01-01"
 # Pages настройки
 pages_build_output_dir = "public"
 
+[[d1_databases]]
+binding = "DB"
+database_name = "logs-db"
+database_id = "253b544c-3a8f-4783-8f7f-47df2e6e0096"
