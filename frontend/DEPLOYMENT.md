@@ -87,11 +87,19 @@ frontend/dist
 
 #### Environment variables (Build)
 
-Добавьте переменные окружения, если нужно:
+**Обязательные:**
 
 | Variable | Value | Description |
 |----------|-------|-------------|
 | `NODE_VERSION` | `18` | Версия Node.js |
+
+**Если backend на другом домене:**
+
+| Variable | Value | Description |
+|----------|-------|-------------|
+| `VITE_API_URL` | `https://logsfucker.pages.dev` | URL backend API |
+
+> ⚠️ **Важно:** Если ваш frontend деплоится на preview URL (например `main.logsfucker.pages.dev`), а backend на production (`logsfucker.pages.dev`), обязательно добавьте `VITE_API_URL`!
 
 ### Шаг 5: Деплой!
 

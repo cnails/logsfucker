@@ -38,7 +38,9 @@ export function useLogs(filters: LogsFilters): UseLogsResult {
         params.append('limit', filters.limit.toString());
       }
 
-      const response = await fetch(`/api/logs?${params.toString()}`);
+      // Используем VITE_API_URL если указан (для cross-domain), иначе локальный API
+      const apiUrl = import.meta.env.VITE_API_URL || '';
+      const response = await fetch(`${apiUrl}/api/logs?${params.toString()}`);
       if (!response.ok) {
         throw new Error(`Ошибка: ${response.statusText}`);
       }

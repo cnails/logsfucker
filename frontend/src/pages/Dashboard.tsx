@@ -64,7 +64,7 @@ export function Dashboard() {
                 LogsFucker
               </h1>
               <p className="text-dark-500 text-sm mt-1">
-                Дерзкий мониторинг логов для веб-расширений
+                Мониторинг логов для веб-расширений
               </p>
             </div>
             <div className="flex items-center gap-4">
@@ -106,7 +106,7 @@ export function Dashboard() {
       <footer className="bg-dark-100/80 border-t border-primary-900/30 mt-16">
         <div className="container mx-auto px-4 py-6">
           <div className="flex items-center justify-between text-sm text-dark-500">
-            <p>© 2025 LogsFucker. Дерзкий мониторинг с характером.</p>
+            <p>© 2025 LogsFucker. Мониторинг логов для веб-расширений.</p>
             <p>
               Powered by{' '}
               <span className="text-primary-400 font-semibold">Cloudflare Pages</span>

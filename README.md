@@ -76,18 +76,29 @@ Frontend будет доступен на http://localhost:3000
 
 ### Деплой
 
-**Backend:**
-```bash
-cd backend
-npm run deploy
-```
+**Full-stack на одном домене (рекомендуется):**
 
-**Frontend:**
-См. подробную инструкцию в [frontend/DEPLOYMENT.md](./frontend/DEPLOYMENT.md)
+1. Подключите репозиторий к Cloudflare Pages
+2. Build command: `cd frontend && npm install && npm run build`
+3. Build output: `frontend/dist`
+4. Привяжите D1 базу в Settings → Functions
+5. Push в main → автоматический деплой!
 
-Быстрый способ - подключите репозиторий к Cloudflare Pages!
+Всё будет на одном домене:
+- Frontend: `https://logsfucker.pages.dev/`
+- API: `https://logsfucker.pages.dev/api/*`
+
+📚 **Детальные инструкции:**
+- [DEPLOY_NOW.md](./DEPLOY_NOW.md) - готово к деплою! 🚀
+- [CLOUDFLARE_FULLSTACK_SETUP.md](./CLOUDFLARE_FULLSTACK_SETUP.md) - full-stack структура
+- [frontend/DEPLOYMENT.md](./frontend/DEPLOYMENT.md) - деплой frontend
+- [backend/DEPLOYMENT.md](./backend/DEPLOYMENT.md) - деплой backend
 
 ## 📚 Документация
+
+### 🎯 Для разработчиков расширений
+- **[📖 Extension Developer Guide](./EXTENSION_DEVELOPER_GUIDE.md)** - правила и лучшие практики отправки логов ⭐
+- [Integration Examples](./backend/INTEGRATION_EXAMPLES.md) - готовые примеры кода
 
 ### Начало работы
 - [WELCOME.md](./WELCOME.md) - приветствие 👋

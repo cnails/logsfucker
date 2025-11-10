@@ -159,7 +159,11 @@ Frontend готов к деплою на Cloudflare Pages:
 2. Настройте build:
    - Build command: `cd frontend && npm install && npm run build`
    - Build output directory: `frontend/dist`
-3. Деплой!
+3. **Важно!** Добавьте Environment Variable:
+   - `VITE_API_URL` = `https://logsfucker.pages.dev`
+4. Деплой!
+
+> 💡 Если frontend и backend на одном домене, `VITE_API_URL` не нужна.
 
 ### Подробная инструкция
 
