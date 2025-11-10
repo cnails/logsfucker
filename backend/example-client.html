@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LogsFucker - Пример клиента</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+        }
+        input, select, textarea, button {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .response {
+            background: #f8f9fa;
+            border-left: 4px solid #007bff;
+            padding: 10px;
+            margin-top: 10px;
+            white-space: pre-wrap;
+            font-family: monospace;
+            font-size: 12px;
+        }
+        .error {
+            border-left-color: #dc3545;
+            background: #fff5f5;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        @media (max-width: 768px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>🔥 LogsFucker - Тестовый клиент</h1>
+    
+    <div class="container">
+        <h2>📝 Настройки</h2>
+        <label>API URL:</label>
+        <input type="text" id="apiUrl" value="http://localhost:8788" placeholder="http://localhost:8788">
+        <small>Для деплоя используйте https://your-project.pages.dev</small>
+    </div>
+
+    <div class="grid">
+        <div class="container">
+            <h2>➕ Отправить лог (POST /api/logs)</h2>
+            <label>Extension Name:</label>
+            <input type="text" id="extensionName" value="test-extension" placeholder="my-extension">
+            
+            <label>Level:</label>
+            <select id="level">
+                <option value="info">info</option>
+                <option value="error">error</option>
+                <option value="warning">warning</option>
+                <option value="debug">debug</option>
+            </select>
+            
+            <label>Message:</label>
+            <textarea id="message" rows="3" placeholder="Текст лога">Тестовое сообщение</textarea>
+            
+            <label>Meta (JSON):</label>
+            <textarea id="meta" rows="3" placeholder='{"key": "value"}'>{"userId": 123, "action": "test"}</textarea>
+            
+            <button onclick="sendLog()">📤 Отправить лог</button>
+            <div id="postResponse" class="response" style="display:none"></div>
+        </div>
+
+        <div class="container">
+            <h2>📊 Получить логи (GET /api/logs)</h2>
+            <label>Extension Name (опц.):</label>
+            <input type="text" id="filterExtension" placeholder="оставьте пустым для всех">
+            
+            <label>Level (опц.):</label>
+            <select id="filterLevel">
+                <option value="">Все уровни</option>
+                <option value="info">info</option>
+                <option value="error">error</option>
+                <option value="warning">warning</option>
+                <option value="debug">debug</option>
+            </select>
+            
+            <label>Limit:</label>
+            <input type="number" id="filterLimit" value="10" min="1" max="1000">
+            
+            <button onclick="getLogs()">🔍 Получить логи</button>
+            <div id="getResponse" class="response" style="display:none"></div>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>📈 Получить статистику (GET /api/stats)</h2>
+        <label>Extension Name (опц.):</label>
+        <input type="text" id="statsExtension" placeholder="оставьте пустым для всех">
+        
+        <button onclick="getStats()">📊 Получить статистику</button>
+        <div id="statsResponse" class="response" style="display:none"></div>
+    </div>
+
+    <script>
+        function getApiUrl() {
+            return document.getElementById('apiUrl').value.trim();
+        }
+
+        function showResponse(elementId, data, isError = false) {
+            const el = document.getElementById(elementId);
+            el.textContent = JSON.stringify(data, null, 2);
+            el.style.display = 'block';
+            el.className = isError ? 'response error' : 'response';
+        }
+
+        async function sendLog() {
+            const apiUrl = getApiUrl();
+            const extensionName = document.getElementById('extensionName').value.trim();
+            const level = document.getElementById('level').value;
+            const message = document.getElementById('message').value.trim();
+            const metaStr = document.getElementById('meta').value.trim();
+
+            if (!extensionName || !message) {
+                alert('Extension Name и Message обязательны!');
+                return;
+            }
+
+            let meta = null;
+            if (metaStr) {
+                try {
+                    meta = JSON.parse(metaStr);
+                } catch (e) {
+                    alert('Некорректный JSON в поле Meta');
+                    return;
+                }
+            }
+
+            try {
+                const response = await fetch(`${apiUrl}/api/logs`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        extensionName,
+                        level,
+                        message,
+                        meta,
+                        ts: Date.now(),
+                    }),
+                });
+
+                const data = await response.json();
+                showResponse('postResponse', { status: response.status, data }, !response.ok);
+            } catch (error) {
+                showResponse('postResponse', { error: error.message }, true);
+            }
+        }
+
+        async function getLogs() {
+            const apiUrl = getApiUrl();
+            const extensionName = document.getElementById('filterExtension').value.trim();
+            const level = document.getElementById('filterLevel').value;
+            const limit = document.getElementById('filterLimit').value;
+
+            const params = new URLSearchParams();
+            if (extensionName) params.append('extensionName', extensionName);
+            if (level) params.append('level', level);
+            if (limit) params.append('limit', limit);
+
+            try {
+                const response = await fetch(`${apiUrl}/api/logs?${params}`);
+                const data = await response.json();
+                showResponse('getResponse', { status: response.status, count: data.length, data }, !response.ok);
+            } catch (error) {
+                showResponse('getResponse', { error: error.message }, true);
+            }
+        }
+
+        async function getStats() {
+            const apiUrl = getApiUrl();
+            const extensionName = document.getElementById('statsExtension').value.trim();
+
+            const params = new URLSearchParams();
+            if (extensionName) params.append('extensionName', extensionName);
+
+            try {
+                const response = await fetch(`${apiUrl}/api/stats?${params}`);
+                const data = await response.json();
+                showResponse('statsResponse', { status: response.status, data }, !response.ok);
+            } catch (error) {
+                showResponse('statsResponse', { error: error.message }, true);
+            }
+        }
+    </script>
+</body>
+</html>
+

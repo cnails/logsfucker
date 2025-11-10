@@ -1,0 +1,18 @@
+{
+  "name": "logsfucker",
+  "version": "1.0.0",
+  "description": "Backend микросервис логов на Cloudflare Pages + D1",
+  "scripts": {
+    "dev": "wrangler pages dev --compatibility-date=2024-01-01",
+    "deploy": "wrangler pages deploy public",
+    "d1:migrate": "wrangler d1 migrations apply logs-db",
+    "d1:list": "wrangler d1 migrations list logs-db",
+    "test:generate": "node scripts/generate-test-data.js"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20241127.0",
+    "typescript": "^5.3.3",
+    "wrangler": "^3.86.1"
+  }
+}
+

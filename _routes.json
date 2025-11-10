@@ -1,0 +1,7 @@
+{
+  "version": 1,
+  "description": "Routing для LogsFucker: Backend Functions на /api/*, Frontend на остальных путях",
+  "include": ["/*"],
+  "exclude": []
+}
+

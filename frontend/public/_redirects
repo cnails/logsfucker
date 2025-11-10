@@ -1,0 +1,5 @@
+# Redirects для SPA (Single Page Application)
+# Все запросы перенаправляются на index.html, кроме API
+/api/*  200
+/*      /index.html   200
+
