@@ -5,6 +5,16 @@
  * - OPTIONS /api/stats - CORS preflight
  */
 
+// Типы для Cloudflare Pages Functions и D1
+type PagesFunction<Env = unknown> = (context: {
+  request: Request;
+  env: Env;
+  params: Record<string, string>;
+  waitUntil: (promise: Promise<any>) => void;
+  next: () => Promise<Response>;
+  data: Record<string, unknown>;
+}) => Response | Promise<Response>;
+
 interface Env {
   DB: D1Database;
 }
@@ -159,9 +169,44 @@ async function getStatsForExtension(
  * GET /api/stats - получение статистики
  */
 export const onRequestGet: PagesFunction<Env> = async (context) => {
-  const { request, env } = context;
+  // Пробуем разные способы получить env
+  let { request, env } = context;
+  
+  // Иногда env может быть в других местах
+  if (!env && context.env) {
+    env = context.env;
+  }
+  
+  // Или env может быть в глобальной области (для некоторых версий Workers)
+  if (!env && typeof globalThis !== 'undefined' && (globalThis as any).env) {
+    env = (globalThis as any).env;
+  }
 
   try {
+    // Детальное логирование для диагностики
+    console.log('=== Diagnostic Info ===');
+    console.log('env:', JSON.stringify(Object.keys(env || {})));
+    console.log('env.DB:', env?.DB);
+    console.log('typeof env:', typeof env);
+    console.log('context:', JSON.stringify(Object.keys(context || {})));
+    
+    // Проверяем наличие DB биндинга
+    if (!env || !env.DB) {
+      console.error('DB binding is not available.');
+      console.error('Available env keys:', Object.keys(env || {}));
+      return new Response(
+        JSON.stringify({ 
+          error: 'Database binding not configured',
+          details: 'DB binding is missing or not properly configured in Cloudflare Pages',
+          debug: {
+            envKeys: Object.keys(env || {}),
+            hasDB: !!env?.DB
+          }
+        }),
+        { status: 500, headers: corsHeaders() }
+      );
+    }
+
     const url = new URL(request.url);
     const params = url.searchParams;
 

@@ -1,20 +1,14 @@
-# Cloudflare Pages конфигурация для full-stack проекта
 name = "logsfucker"
 compatibility_date = "2024-01-01"
 
-# Pages настройки
+# Куда кладёт сборка фронта
 pages_build_output_dir = "frontend/dist"
 
-# D1 база данных добавляется через Dashboard UI
-# Dashboard → Settings → Functions → D1 database bindings
-# Variable name: DB
-# D1 database: logs-db (выберите из списка)
+# D1 bindings настраиваются через Dashboard (Settings → Functions → D1 database bindings)
+# Не раскомментируйте [[d1_databases]] - это конфликтует с Dashboard
 
-# Environment variables для production
 [env.production]
 vars = { ENVIRONMENT = "production" }
 
-# Environment variables для preview
 [env.preview]
 vars = { ENVIRONMENT = "preview" }
-

@@ -6,6 +6,16 @@
  * - OPTIONS /api/logs - CORS preflight
  */
 
+// Типы для Cloudflare Pages Functions и D1
+type PagesFunction<Env = unknown> = (context: {
+  request: Request;
+  env: Env;
+  params: Record<string, string>;
+  waitUntil: (promise: Promise<any>) => void;
+  next: () => Promise<Response>;
+  data: Record<string, unknown>;
+}) => Response | Promise<Response>;
+
 interface Env {
   DB: D1Database;
 }
@@ -43,6 +53,18 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
   const { request, env } = context;
 
   try {
+    // Проверяем наличие DB биндинга
+    if (!env || !env.DB) {
+      console.error('DB binding is not available. env:', env);
+      return new Response(
+        JSON.stringify({ 
+          error: 'Database binding not configured',
+          details: 'DB binding is missing or not properly configured in Cloudflare Pages'
+        }),
+        { status: 500, headers: corsHeaders() }
+      );
+    }
+
     // Парсим JSON из body
     let body: IncomingLog;
     try {
@@ -122,6 +144,18 @@ export const onRequestGet: PagesFunction<Env> = async (context) => {
   const { request, env } = context;
 
   try {
+    // Проверяем наличие DB биндинга
+    if (!env || !env.DB) {
+      console.error('DB binding is not available. env:', env);
+      return new Response(
+        JSON.stringify({ 
+          error: 'Database binding not configured',
+          details: 'DB binding is missing or not properly configured in Cloudflare Pages'
+        }),
+        { status: 500, headers: corsHeaders() }
+      );
+    }
+
     const url = new URL(request.url);
     const params = url.searchParams;
 
