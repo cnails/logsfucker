@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useMemo } from 'react';
 import { Filters, type FilterValues } from '../components/Filters';
 import { StatsPanel } from '../components/StatsPanel';
 import { AnomaliesTable } from '../components/AnomaliesTable';
