@@ -9,7 +9,7 @@ pages_build_output_dir = "frontend/dist"
 [[d1_databases]]
 binding = "DB"
 database_name = "logs-db"
-database_id = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"  # Замените на ваш database_id
+database_id = "253b544c-3a8f-4783-8f7f-47df2e6e0096"
 
 # Environment variables для production
 [env.production]

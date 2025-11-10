@@ -15,10 +15,15 @@ frontend/node_modules/
 backend/node_modules/
 backend/.wrangler/
 
-# Environment
+# Environment variables (ВАЖНО: не пушить секреты!)
 .env
 .env.local
 .env.*.local
+.env.production
+.env.development
+.env.test
+**/.env
+**/.env.local
 
 # IDE
 .vscode/*
@@ -44,3 +49,17 @@ lerna-debug.log*
 # Wrangler
 .wrangler/
 wrangler.toml.bak
+
+# Секреты и credentials (на всякий случай)
+*.key
+*.pem
+*.p12
+*secret*
+*credential*
+credentials.json
+
+# Backup файлы с возможными секретами
+*.backup
+*.bak
+*.swp
+*.swo

@@ -121,6 +121,10 @@ Frontend будет доступен на http://localhost:3000
 - [Integration Examples](./backend/INTEGRATION_EXAMPLES.md) - интеграция расширений
 - [Frontend FEATURES](./frontend/FEATURES.md) - возможности интерфейса
 
+### Безопасность
+- [SECURITY_QUICK_GUIDE.md](./SECURITY_QUICK_GUIDE.md) - что можно пушить в репозиторий 🔒
+- [SECURITY.md](./SECURITY.md) - полный гайд по безопасности
+
 ## ✨ Возможности
 
 ### Backend
